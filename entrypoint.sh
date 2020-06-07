@@ -4,6 +4,8 @@ set -e -o pipefail
 
 folder="/syntax_tests"
 packages="$folder/Data/Packages"
+
+rm -rf "$folder"
 mkdir -vp "$packages"
 
 get_url() {
@@ -29,6 +31,7 @@ fetch_binary() {
 
 fetch_default_packages() {
     wget --content-disposition "https://github.com/sublimehq/Packages/archive/$INPUT_DEFAULT_PACKAGES.tar.gz"
+    ls -al
     tar xf Packages-*.tar.gz
     if [[ $INPUT_DEFAULT_TESTS != true ]]; then
         find Packages-*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
@@ -50,7 +53,7 @@ get_url | fetch_binary
 echo '::endgroup::'
 
 if [[ $INPUT_DEFAULT_PACKAGES != false ]]; then
-    echo "::group::Fetching default packages (ref: $INPUT_DEFAULT_PACKAGES)"
+    echo "::group::Fetching default packages (ref: $INPUT_DEFAULT_PACKAGES, tests: $INPUT_DEFAULT_TESTS)"
     fetch_default_packages
     echo '::endgroup::'
 else
