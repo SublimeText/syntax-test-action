@@ -1,6 +1,6 @@
 # Sublime Text Syntax Test Action
 
-![Test action](https://github.com/SublimeText/syntax-test-action/workflows/Test%20action/badge.svg)
+![Tests](https://github.com/SublimeText/syntax-test-action/workflows/Tests/badge.svg)
 
 Run syntax tests on your Sublime Text syntax definitions
 using the ST syntax test binary.
