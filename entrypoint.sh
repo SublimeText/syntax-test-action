@@ -66,6 +66,11 @@ fi
 echo 'Linking package'
 link_package
 
+# TODO There seems to be some add-matcher workflow command.
+#   We could generate/adjust that to only catch files
+#   in the installed package,
+#   but we may not be able to rewrite the original root path.
+#   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
 "$folder/syntax_tests" | \
     while read -r line; do

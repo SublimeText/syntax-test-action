@@ -32,3 +32,5 @@ outputs: {}
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  # TODO use pre-entrypoint to setup?
+  # https://help.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-entrypoint
