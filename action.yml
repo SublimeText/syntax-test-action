@@ -1,0 +1,29 @@
+name: Sublime Text Syntax Tests
+author: FichtFoll
+description: Install and run Sublime Text's syntax test runner
+# icon: TODO
+color: yellow
+
+inputs:
+  build:
+    description: Build that should be installed. Not all builds are available
+    required: false
+    default: latest
+  default_packages:
+    description: Install the default packages and which version (accepts any git ref)
+    required: false
+    default: false
+  package_root:
+    description: Path to the package root that is linked to the testing Packages folder
+    required: false
+    default: .
+  package_name:
+    description: Name to install the package as
+    required: false
+    default: ${{ github.event.repository.name }}  # github.repository has full name
+
+outputs: {}
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

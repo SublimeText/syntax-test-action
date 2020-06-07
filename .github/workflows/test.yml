@@ -1,0 +1,32 @@
+name: Test action
+
+on: [push]
+
+jobs:
+  no_defpkg:
+    name: Test without default packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./
+        with:
+          build: 4073
+          package_root: test/no_defpkg
+
+  defpkg:
+    name: Test with default packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./
+        with:
+          build: 4073
+          default_packages: master
+          package_root: test/defpkg
+
+  st3:
+    name: ST3 build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./
+        with:
+          build: 3210
+          default_packages: st3
