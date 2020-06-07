@@ -26,7 +26,7 @@ on:
 
 jobs:
   syntax_tests:
-    name: Test without default packages
+    name: Run Syntax Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
