@@ -12,8 +12,6 @@ name: Syntax Tests
 
 on:
   push:
-    branches:
-      - master
     paths:
       - '**.sublime-syntax'
       - '**/syntax_test*'
