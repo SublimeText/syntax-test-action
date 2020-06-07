@@ -21,14 +21,15 @@ get_url() {
 
 fetch_binary() {
     read -r url
-    cd "$(mktemp -d)"
+    pushd "$(mktemp -d)"
     wget --content-disposition "$url"
     tar xf st*_syntax_tests_build_*_x64.tar.bz2
     mv st*_syntax_tests/syntax_tests "$folder"
+    popd
 }
 
 fetch_default_packages() {
-    cd "$(mktemp -d)"
+    pushd "$(mktemp -d)"
     wget --content-disposition "https://github.com/sublimehq/Packages/archive/$INPUT_DEFAULT_PACKAGES.tar.gz"
     tar xf Packages-*.tar.gz
     if [[ $INPUT_DEFAULT_TESTS != true ]]; then
@@ -40,6 +41,7 @@ fetch_default_packages() {
         -mindepth 1 \
         -not -name '.github' \
         -exec mv -vt "$packages/" '{}' +
+    popd
 }
 
 link_package() {
@@ -58,7 +60,8 @@ else
     echo '::debug::Skipping default packages'
 fi
 
-# TODO cache $folder based on $INPUT_BUILD != latest && $INPUT_DEFAULT_PACKAGES
+# TODO cache $folder/syntax_test based on $INPUT_BUILD != latest
+# TODO cache $packages based on $INPUT_DEFAULT_PACKAGES not in (master, st3)
 
 echo 'Linking package'
 link_package
