@@ -13,6 +13,10 @@ inputs:
     description: Install the default packages and which version (accepts any git ref)
     required: false
     default: false
+  default_tests:
+    description: Whether to keep the tests of the default packages
+    required: false
+    default: false
   package_root:
     description: Path to the package root that is linked to the testing Packages folder
     required: false

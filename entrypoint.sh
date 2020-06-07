@@ -30,8 +30,9 @@ fetch_binary() {
 fetch_default_packages() {
     wget --content-disposition "https://github.com/sublimehq/Packages/archive/$INPUT_DEFAULT_PACKAGES.tar.gz"
     tar xf Packages-*.tar.gz
-    # TODO remove bundled syntax tests?
-    # find Packages-*/ -type f -name 'syntax_test_*' -exec rm '{}' \;
+    if [[ $INPUT_DEFAULT_TESTS != true ]]; then
+        find Packages-*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
+    fi
     find Packages-*/ \
         -type d \
         -maxdepth 1 \
