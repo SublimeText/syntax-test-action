@@ -2,7 +2,7 @@ name: Sublime Text Syntax Tests
 author: FichtFoll
 description: Install and run Sublime Text's syntax test runner
 branding:
-  icon: play-circle
+  icon: check-circle
   color: orange
 
 inputs:
