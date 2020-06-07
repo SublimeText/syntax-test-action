@@ -34,3 +34,11 @@ jobs:
           build: 3210
           default_packages: st3
           package_root: test/st3
+
+      # This is expected to fail and used to test the error wrapper
+      - uses: ./
+        continue-on-error: true
+        with:
+          build: 4073
+          default_packages: master
+          package_root: test/st3

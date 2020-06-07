@@ -42,7 +42,7 @@ fetch_default_packages() {
 }
 
 link_package() {
-    ln -vs "$(realpath "$INPUT_PACKAGE_ROOT")" "$folder/Data/Packages/$INPUT_PACKAGE_NAME"
+    ln -vs "$(realpath "$INPUT_PACKAGE_ROOT")" "$packages/$INPUT_PACKAGE_NAME"
 }
 
 echo "::group::Fetching binary (build $INPUT_BUILD)"
@@ -62,7 +62,15 @@ fi
 echo 'Linking package'
 link_package
 
-# TODO wrap and parse error messages
-# https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-# /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
-exec "$folder/syntax_tests"
+echo 'Running binary'
+"$folder/syntax_tests" | \
+    while read -r line; do
+        echo "$line"
+        # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
+        if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
+            IFS=$':' read -r path row col message <<< "$line"
+            file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+            # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+            echo "::error file=$file,line=$row,col=$col::$message"
+        fi
+    done
