@@ -2,7 +2,5 @@
 
 # <- text.test
 test
-# <- text.test meta.test
-
 True
 # <- source.python constant.language

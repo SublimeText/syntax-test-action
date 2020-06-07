@@ -1,12 +1,13 @@
 name: Test action
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   no_defpkg:
     name: Test without default packages
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./
         with:
           build: 4073
@@ -16,6 +17,7 @@ jobs:
     name: Test with default packages
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./
         with:
           build: 4073
@@ -26,7 +28,9 @@ jobs:
     name: ST3 build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./
         with:
           build: 3210
           default_packages: st3
+          package_root: test/st3
