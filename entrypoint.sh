@@ -5,7 +5,7 @@ set -e -o pipefail
 folder="/syntax_tests"
 packages="$folder/Data/Packages"
 
-rm -rf "$folder"
+rm -vrf "$folder"
 mkdir -vp "$packages"
 
 get_url() {
