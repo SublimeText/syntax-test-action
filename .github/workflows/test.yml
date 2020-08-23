@@ -4,7 +4,30 @@ on: [push, pull_request]
 
 jobs:
   no_defpkg:
-    name: Test without default packages
+    name: Without default packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          build: 4084
+          package_root: test/no_defpkg
+
+  # TODO indentation tests
+
+  defpkg:
+    name: With default packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          build: 4084
+          default_packages: master
+          package_root: test/defpkg
+
+  no_defpkg_old:
+    name: Without default packages, old runtime
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,17 +35,6 @@ jobs:
         with:
           build: 4073
           package_root: test/no_defpkg
-
-  defpkg:
-    name: Test with default packages
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        with:
-          build: 4073
-          default_packages: master
-          package_root: test/defpkg
 
   st3:
     name: ST3 build
@@ -39,6 +51,6 @@ jobs:
       - uses: ./
         continue-on-error: true
         with:
-          build: 4073
+          build: 4084
           default_packages: master
           package_root: test/st3

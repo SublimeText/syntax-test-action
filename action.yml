@@ -30,7 +30,29 @@ inputs:
 outputs: {}
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  # TODO use pre-entrypoint to setup?
-  # https://help.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-entrypoint
+  using: composite
+  steps:
+    - name: Install dependencies
+      # composite steps don't support `if`
+      run: |
+        if [[ ${{ inputs.build }} < 4077 || ${{ inputs.build }} == 'latest' ]]; then
+          sudo apt-get update && sudo apt-get install -y \
+            libcairo2 \
+            libgl1-mesa-glx \
+            libglib2.0-0 \
+            libglu1-mesa \
+            libgtk-3-0 \
+            libpango-1.0-0 \
+            libpangocairo-1.0-0;
+        fi
+      shell: bash
+    - name: Download and run syntax tests
+      run: ${{ github.action_path }}/syntax-tests.sh
+      shell: bash
+      env:
+        # composite actions don't expose input variables by default for some reason (unlike docker actions)
+        INPUT_BUILD: ${{ inputs.build }}
+        INPUT_DEFAULT_PACKAGES: ${{ inputs.default_packages }}
+        INPUT_DEFAULT_TESTS: ${{ inputs.default_tests }}
+        INPUT_PACKAGE_ROOT: ${{ inputs.package_root }}
+        INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
