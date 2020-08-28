@@ -37,6 +37,7 @@ Note that you must use a separate job
 if you want to test multiple ST build
 or default packages versions.
 
+
 ## Inputs
 
 | Name                 | Default         | Description                                                                            |
@@ -48,3 +49,18 @@ or default packages versions.
 | **package_name**     | Repository name | Name to install the package as.                                                        |
 
 **Note that 'latest' currently resolves to the latest ST3 build.**
+
+
+## Changelog
+
+### v2 (2020-08-28)
+
+- Updated to new upstream download paths.
+- Does not fetch dependencies anymore for 4077+.
+- Changed from docker to composite action.
+
+### v1 (2020-06-07)
+
+Initial working version
+supporting ST3 and ST4 builds
+as well as fetching the default packages.
