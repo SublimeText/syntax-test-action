@@ -28,11 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: SublimeText/syntax-test-action@v1
+      - uses: SublimeText/syntax-test-action@v2
         with:
-          build: 4073  # or 'latest' for the latest ST3 build
+          build: 4084  # or 'latest' for the latest ST3 build
 ```
 
+Note that you must use a separate job
+if you want to test multiple ST build
+or default packages versions.
 
 ## Inputs
 
