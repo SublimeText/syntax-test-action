@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          build: 4084
+          build: 4102
           package_root: test/no_defpkg
 
   # TODO indentation tests
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          build: 4084
+          build: 4102
           default_packages: master
           package_root: test/defpkg
 
@@ -56,6 +56,6 @@ jobs:
       - uses: ./
         continue-on-error: true
         with:
-          build: 4084
+          build: 4102
           default_packages: master
           package_root: test/st3

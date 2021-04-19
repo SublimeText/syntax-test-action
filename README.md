@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: SublimeText/syntax-test-action@v2
         with:
-          build: 4084  # or 'latest' for the latest ST3 build
+          build: 4102  # or 'latest' for the latest ST3 build
 ```
 
 Note that you must use a separate job
