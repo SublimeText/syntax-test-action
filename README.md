@@ -24,13 +24,21 @@ on:
 
 jobs:
   syntax_tests:
-    name: Run Syntax Tests
+    name: Syntax Tests (${{ matrix.build }})
+    strategy:
+      matrix:
+        include:
+          - build: latest  # This is the default
+            # packages: master  # If you depend on a default syntax definition
+          - build: 3210  # Latest known ST3 build with a test binary
+            # packages: st3
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: SublimeText/syntax-test-action@v2
         with:
-          build: 4102  # or 'latest' for the latest ST3 build
+          build: ${{ matrix.build }}
+          default_packages: ${{ matrix.packages }}
 ```
 
 Note that you must use a separate job
@@ -42,7 +50,7 @@ or default packages versions.
 
 | Name                 | Default         | Description                                                                                |
 | :------------------- | :-------------- | :----------------------------------------------------------------------------------------- |
-| **build**            | `"latest"`      | ST build that should be installed. Not all builds are available.                           |
+| **build**            | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
 | **default_packages** | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
 | **default_tests**    | `false`         | Whether to keep the tests of the default packages.                                         |
 | **package_root**     | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
