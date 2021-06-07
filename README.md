@@ -63,7 +63,13 @@ or default packages versions.
 
 ## Changelog
 
-### v2 (2020-08-28)
+### v2
+### v2.1 (2021-06-07)
+
+- Treat `'latest'` as an ST4 build now that the upstream URL has been updated.
+- Group dependency installation, if necessary.
+
+### v2.0 (2020-08-28)
 
 - Updated to new upstream download paths.
 - Does not fetch dependencies anymore for 4077+.
