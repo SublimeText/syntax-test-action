@@ -36,6 +36,7 @@ runs:
       # composite steps don't support `if`
       run: |
         if [[ ${{ inputs.build }} < 4077 || ${{ inputs.build }} == 'latest' ]]; then
+          echo "::group::Installing dependencies"
           sudo apt-get update && sudo apt-get install -y \
             libcairo2 \
             libgl1-mesa-glx \
@@ -44,6 +45,7 @@ runs:
             libgtk-3-0 \
             libpango-1.0-0 \
             libpangocairo-1.0-0;
+          echo '::endgroup::'
         fi
       shell: bash
     - name: Download and run syntax tests
