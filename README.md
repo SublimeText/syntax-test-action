@@ -38,7 +38,7 @@ jobs:
       - uses: SublimeText/syntax-test-action@v2
         with:
           build: ${{ matrix.build }}
-          default_packages: ${{ matrix.packages }}
+          # default_packages: ${{ matrix.packages }}
 ```
 
 Note that you must use a separate job
