@@ -26,6 +26,10 @@ inputs:
     description: Name to install the package as
     required: false
     default: ${{ github.event.repository.name }}  # github.repository has full name
+  test_file_regex:
+    description: POSIX egrep pattern passed to `find -regex` to choose files to test
+    required: false
+    default: '.*/syntax_test.*'
 
 outputs: {}
 
@@ -58,3 +62,4 @@ runs:
         INPUT_DEFAULT_TESTS: ${{ inputs.default_tests }}
         INPUT_PACKAGE_ROOT: ${{ inputs.package_root }}
         INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
+        INPUT_TEST_FILE_REGEX: ${{ inputs.test_file_regex }}

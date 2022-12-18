@@ -43,7 +43,7 @@ fetch_default_packages() {
     wget --content-disposition "https://github.com/sublimehq/Packages/archive/$INPUT_DEFAULT_PACKAGES.tar.gz"
     tar xf Packages-*.tar.gz
     if [[ $INPUT_DEFAULT_TESTS != true ]]; then
-        find Packages-*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
+        find Packages-*/ -type f -regextype posix-egrep -regex '$INPUT_TEST_FILE_REGEX' -exec rm -v '{}' \;
     fi
     find Packages-*/ \
         -type d \
