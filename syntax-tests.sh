@@ -63,7 +63,7 @@ link_additional_packages() {
         IFS=","
         for pkg in $INPUT_ADDITIONAL_PACKAGES; do
             # link additional package into testing dir's Package folder
-            ln -vs "$(realpath "$pkg")" "$packages/$pkg"
+            ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
             # drop additional syntax tests
             if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then
                 find "$packages/$pkg"*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;

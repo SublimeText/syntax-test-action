@@ -127,7 +127,7 @@ or default packages versions.
 | **build**               | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
 | **default_packages**    | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
 | **default_tests**       | `false`         | Whether to keep the tests of the default packages.                                         |
-| **additional_packages** | `false`         | Comma separated list of additionally checked out packages to install (e.g.: LESS,Sass).    |
+| **additional_packages** | `false`         | Comma-separated list of paths to additionally checked out packages to install (e.g.: `LESS,third-party/Sass`).    |
 | **additional_tests**    | `false`         | Whether to keep the tests of the additional packages.                                      |
 | **package_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
 | **package_name**        | Repository name | Name to install the package as.                                                            |
