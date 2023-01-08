@@ -48,12 +48,12 @@ jobs:
         with:
           repository: jwortmann/ini-syntax
           ref: v1.5.0
-          path: third-party/INI
+          path: ${{ runner.workspace }}/INI
       - uses: ./
         with:
           build: 4143  # stable
           package_root: test/third-party
-          additional_packages: third-party/INI
+          additional_packages: ${{ runner.workspace }}/INI
 
   st3:
     name: ST3 build
