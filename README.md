@@ -7,6 +7,8 @@ using the ST syntax test binary.
 
 ## Usage
 
+### Minimal Example
+
 ```yaml
 name: Syntax Tests
 
@@ -25,6 +27,8 @@ on:
 jobs:
   syntax_tests:
     name: Syntax Tests (${{ matrix.build }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # default is 6 hours!
     strategy:
       matrix:
         include:
@@ -32,13 +36,83 @@ jobs:
             # packages: master  # If you depend on a default syntax definition
           - build: 3210  # Latest known ST3 build with a test binary
             # packages: st3
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: SublimeText/syntax-test-action@v2
         with:
           build: ${{ matrix.build }}
           # default_packages: ${{ matrix.packages }}
+```
+
+### Multiple Syntax Package Tests Example
+
+```yaml
+name: Multi Package Syntax Tests
+
+on:
+  push:
+    paths:
+      - '**.sublime-syntax'
+      - '**/syntax_test*'
+      - '**.tmPreferences'
+  pull_request:
+    paths:
+      - '**.sublime-syntax'
+      - '**/syntax_test*'
+      - '**.tmPreferences'
+
+jobs:
+  syntax_tests:
+    name: Syntax Tests (${{ matrix.build }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15         # default is 6 hours!
+    env:
+      package_name: My Package  # install name as specified at packagecontrol.io
+    strategy:
+      matrix:
+        include:
+          - build: latest       # This is the default
+            packages: master    # default packages revision to use
+            less_ref: master    # LESS package revision to use
+            sass_ref: master    # SASS package revision to use
+          - build: 3210         # Latest known ST3 build with a test binary
+            packages: v3210     # default packages revision to use
+            less_ref: master    # LESS package revision to use
+            sass_ref: master    # SASS package revision to use
+    steps:
+      # Checkout primary package of this repository 
+      # and all additionally required packages next to each other
+      # by specifying `path` for all.
+      # `path` should match the package's name from packagecontrol.io
+      # as this may be relevant for a package to work porperly.
+      - name: Checkout ${{ env.package_name }} (primary package)
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.package_name }}
+      - name: Checkout LESS (dependency)
+        uses: actions/checkout@v3
+        with:
+          repository: danro/LESS-sublime
+          ref: ${{ matrix.less_ref }}
+          path: LESS
+      - name: Checkout Sass/Scss (dependency)
+        uses: actions/checkout@v3
+        with:
+          repository: braver/SublimeSass
+          ref: ${{ matrix.sass_ref }}
+          path: Sass
+      # Run syntax test for primary package 
+      # after installing default and additional packages
+      - name: Run Syntax Tests for Sublime Text ${{ matrix.build }}
+        uses: SublimeText/syntax-test-action@v2
+        with:
+          build: ${{ matrix.build }}
+          package_name: ${{ env.package_name }}
+          package_root: ${{ env.package_name }}
+          default_packages: ${{ matrix.packages }}
+          default_tests: false          
+          additional_packages: LESS,Sass
+          additional_tests: false          
 ```
 
 Note that you must use a separate job
@@ -48,13 +122,15 @@ or default packages versions.
 
 ## Inputs
 
-| Name                 | Default         | Description                                                                                |
-| :------------------- | :-------------- | :----------------------------------------------------------------------------------------- |
-| **build**            | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
-| **default_packages** | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
-| **default_tests**    | `false`         | Whether to keep the tests of the default packages.                                         |
-| **package_root**     | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
-| **package_name**     | Repository name | Name to install the package as.                                                            |
+| Name                    | Default         | Description                                                                                |
+| :---------------------- | :-------------- | :----------------------------------------------------------------------------------------- |
+| **build**               | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
+| **default_packages**    | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
+| **default_tests**       | `false`         | Whether to keep the tests of the default packages.                                         |
+| **additional_packages** | `false`         | Comma-separated list of paths to additionally checked out packages to install (e.g.: `LESS,third-party/Sass`).    |
+| **additional_tests**    | `false`         | Whether to keep the tests of the additional packages.                                      |
+| **package_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
+| **package_name**        | Repository name | Name to install the package as.                                                            |
 
 [default packages]: https://github.com/sublimehq/Packages/
 
@@ -62,6 +138,7 @@ or default packages versions.
 ## Changelog
 
 ### v2
+
 ### v2.1 (2021-06-07)
 
 - Treat `'latest'` as an ST4 build now that the upstream URL has been updated.

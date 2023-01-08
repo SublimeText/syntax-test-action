@@ -58,6 +58,20 @@ link_package() {
     ln -vs "$(realpath "$INPUT_PACKAGE_ROOT")" "$packages/$INPUT_PACKAGE_NAME"
 }
 
+link_additional_packages() {
+    if [[ $INPUT_ADDITIONAL_PACKAGES != false ]]; then
+        IFS=","
+        for pkg in $INPUT_ADDITIONAL_PACKAGES; do
+            # link additional package into testing dir's Package folder
+            ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
+            # drop additional syntax tests
+            if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then
+                find "$packages/$pkg"*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
+            fi
+        done
+    fi
+}
+
 # TODO cache $folder/syntax_test based on $INPUT_BUILD != latest
 echo "::group::Fetching binary (build $INPUT_BUILD)"
 get_url | fetch_binary
@@ -75,6 +89,7 @@ fi
 
 echo 'Linking package'
 link_package
+link_additional_packages
 
 # TODO There seems to be some add-matcher workflow command.
 #   We could generate/adjust that to only catch files

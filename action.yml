@@ -18,6 +18,14 @@ inputs:
     description: Whether to keep the tests of the default packages
     required: false
     default: false
+  additional_packages:
+    description: Comma separated list of additional package roots that are linked to the testing Packages folder
+    required: false
+    default: false
+  additional_tests:
+    description: Whether to keep the tests of additional packages
+    required: false
+    default: false
   package_root:
     description: Path to the package root that is linked to the testing Packages folder
     required: false
@@ -56,5 +64,7 @@ runs:
         INPUT_BUILD: ${{ inputs.build }}
         INPUT_DEFAULT_PACKAGES: ${{ inputs.default_packages }}
         INPUT_DEFAULT_TESTS: ${{ inputs.default_tests }}
+        INPUT_ADDITIONAL_PACKAGES: ${{ inputs.additional_packages }}
+        INPUT_ADDITIONAL_TESTS: ${{ inputs.additional_tests }}
         INPUT_PACKAGE_ROOT: ${{ inputs.package_root }}
         INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
