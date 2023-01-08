@@ -21,7 +21,7 @@ inputs:
   additional_packages:
     description: Comma separated list of additional package roots that are linked to the testing Packages folder
     required: false
-    default: false
+    default: ''
   additional_tests:
     description: Whether to keep the tests of additional packages
     required: false
