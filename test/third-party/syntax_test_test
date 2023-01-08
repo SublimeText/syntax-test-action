@@ -1,8 +1,4 @@
 # SYNTAX TEST "Test.sublime-syntax"
 
-# <- text.test
-test
-# <- text.test meta.test
-
 [section]
 #^^^^^^^ source.ini meta.section.ini
