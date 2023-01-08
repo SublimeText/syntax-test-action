@@ -67,7 +67,7 @@ link_additional_packages() {
             ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
             # drop additional syntax tests
             if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then
-                find "$packages/$pkg"*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
+                find "$(realpath "$pkg")" -type f -name 'syntax_test*' -exec rm -v '{}' \;
             fi
         done
     fi
