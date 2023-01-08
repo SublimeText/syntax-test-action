@@ -37,6 +37,24 @@ jobs:
           build: 4073
           package_root: test/no_defpkg
 
+  third-party:
+    name: Third-party
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo (primary package)
+        uses: actions/checkout@v3
+      - name: Checkout INI package (dependency)
+        uses: actions/checkout@v3
+        with:
+          repository: jwortmann/ini-syntax
+          ref: v1.5.0
+          path: third-party/INI
+      - uses: ./
+        with:
+          build: 4143  # stable
+          package_root: test/third-party
+          additional_packages: third-party/INI
+
   st3:
     name: ST3 build
     runs-on: ubuntu-latest

@@ -1,0 +1,8 @@
+%YAML 1.2
+---
+scope: text.test
+
+contexts:
+  main:
+    - match: ''
+      push: Packages/INI/INI.sublime-syntax
