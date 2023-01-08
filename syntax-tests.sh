@@ -59,10 +59,11 @@ link_package() {
 }
 
 link_additional_packages() {
-    if [[ $INPUT_ADDITIONAL_PACKAGES != false ]]; then
+    if [[ -n $INPUT_ADDITIONAL_PACKAGES ]]; then
         IFS=","
         for pkg in $INPUT_ADDITIONAL_PACKAGES; do
             # link additional package into testing dir's Package folder
+            echo "Linking third-party package from $pkg"
             ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
             # drop additional syntax tests
             if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then

@@ -25,7 +25,7 @@ inputs:
   additional_tests:
     description: Whether to keep the tests of additional packages
     required: false
-    default: false
+    default: ''
   package_root:
     description: Path to the package root that is linked to the testing Packages folder
     required: false
