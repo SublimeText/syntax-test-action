@@ -80,7 +80,7 @@ jobs:
             less_ref: master    # LESS package revision to use
             sass_ref: master    # SASS package revision to use
     steps:
-      # Checkout primary package of this repository 
+      # Checkout primary package of this repository
       # and all additionally required packages next to each other
       # by specifying `path` for all.
       # `path` should match the package's name from packagecontrol.io
@@ -101,7 +101,7 @@ jobs:
           repository: braver/SublimeSass
           ref: ${{ matrix.sass_ref }}
           path: Sass
-      # Run syntax test for primary package 
+      # Run syntax test for primary package
       # after installing default and additional packages
       - name: Run Syntax Tests for Sublime Text ${{ matrix.build }}
         uses: SublimeText/syntax-test-action@v2
@@ -110,14 +110,21 @@ jobs:
           package_name: ${{ env.package_name }}
           package_root: ${{ env.package_name }}
           default_packages: ${{ matrix.packages }}
-          default_tests: false          
+          default_tests: false  # default
           additional_packages: LESS,Sass
-          additional_tests: false          
+          additional_tests: false  # default
 ```
 
-Note that you must use a separate job
-if you want to test multiple ST build
-or default packages versions.
+> **Note**
+> You must use a separate job
+> if you want to test multiple ST build
+> or default packages versions.
+
+> **Warning**
+> It is important that you checkout your dependencies
+> to a folder that is separate from your `package_root`,
+> otherwise the dependency packages placed in a subfolder
+> would be treated (and tested) as a part of your package.
 
 
 ## Inputs
