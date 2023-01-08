@@ -146,6 +146,12 @@ jobs:
 
 ### v2
 
+### v2.2 (2023-01-08)
+
+- Support linking of multiple additional third-party packages
+  via `additional_packages` and `additional_tests`.
+  (@deathaxe, #12, #16)
+
 ### v2.1 (2021-06-07)
 
 - Treat `'latest'` as an ST4 build now that the upstream URL has been updated.
