@@ -93,7 +93,8 @@ link_package
 link_additional_packages
 
 # debug
-find "$packages" -print
+ls -la "$packages"
+find -L "$packages" -print
 
 # TODO There seems to be some add-matcher workflow command.
 #   We could generate/adjust that to only catch files
