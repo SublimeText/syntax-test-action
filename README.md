@@ -35,7 +35,7 @@ jobs:
           - build: latest  # This is the default
             # packages: master  # If you depend on a default syntax definition
           - build: 3210  # Latest known ST3 build with a test binary
-            # packages: st3
+            # packages: v3189   # Latest ST3 tag on the Packages repo
     steps:
       - uses: actions/checkout@v3
       - uses: SublimeText/syntax-test-action@v2
@@ -76,7 +76,7 @@ jobs:
             less_ref: master    # LESS package revision to use
             sass_ref: master    # SASS package revision to use
           - build: 3210         # Latest known ST3 build with a test binary
-            packages: v3210     # default packages revision to use
+            packages: v3189     # default packages revision to use
             less_ref: master    # LESS package revision to use
             sass_ref: master    # SASS package revision to use
     steps:
