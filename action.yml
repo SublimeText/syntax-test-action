@@ -47,7 +47,8 @@ runs:
           echo "::group::Installing dependencies"
           sudo apt-get update && sudo apt-get install -y \
             libcairo2 \
-            libgl1-mesa-glx \
+            libgl1 \
+            libglx-mesa0 \
             libglib2.0-0 \
             libglu1-mesa \
             libgtk-3-0 \
