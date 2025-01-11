@@ -146,6 +146,10 @@ jobs:
 
 ### v2
 
+### v2.3 (2025-01-11)
+
+- Fix dependencies for `ubuntu-24.04` runner. (@deathaxe, #17, #18)
+
 ### v2.2 (2023-01-08)
 
 - Support linking of multiple additional third-party packages
