@@ -27,14 +27,24 @@ jobs:
           default_packages: master
           package_root: test/defpkg
 
-  no_defpkg_old:
-    name: Without default packages, old runtime
+  no_defpkg_old_build:
+    name: Without default packages, old build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./
         with:
           build: 4073
+          package_root: test/no_defpkg
+
+  no_defpkg_old_runtime:
+    name: Without default packages, latest build, ubuntu-20.04
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          build: latest
           package_root: test/no_defpkg
 
   third-party:
