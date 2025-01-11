@@ -73,12 +73,12 @@ jobs:
         include:
           - build: latest       # This is the default
             packages: master    # default packages revision to use
-            less_ref: master    # LESS package revision to use
-            sass_ref: master    # SASS package revision to use
-          - build: 3210         # Latest known ST3 build with a test binary
-            packages: v3189     # default packages revision to use
-            less_ref: master    # LESS package revision to use
-            sass_ref: master    # SASS package revision to use
+            less_ref: master    # Less package revision to use
+            sass_ref: master    # Sass package revision to use
+          - build: 3211         # Latest known ST3 build with a test binary
+            packages: v3211     # default packages revision to use
+            less_ref: master    # Less package revision to use
+            sass_ref: master    # Sass package revision to use
     steps:
       # Checkout primary package of this repository
       # and all additionally required packages next to each other
@@ -89,18 +89,40 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: ${{ env.package_name }}
-      - name: Checkout LESS (dependency)
+      - name: Checkout Less (dependency)
         uses: actions/checkout@v4
         with:
-          repository: danro/LESS-sublime
+          repository: SublimeText/Less
           ref: ${{ matrix.less_ref }}
-          path: LESS
+          path: Less
       - name: Checkout Sass/Scss (dependency)
         uses: actions/checkout@v4
         with:
-          repository: braver/SublimeSass
+          repository: SublimeText/Sass
           ref: ${{ matrix.sass_ref }}
           path: Sass
+      # External syntax definitions, which are embedded without being tested
+      # in detail, can be provided as empty dummies to just ensure their main
+      # scope is available.
+      - name: Create Dummy package (dependency)
+        run: |
+          scopes=(
+              source.livescript
+              source.postcss
+              source.sss
+              source.stylus
+          )
+          mkdir -vp "Dummy"
+          for scope in ${scopes[@]}; do
+          cat << SYNTAX > "Dummy/$scope.sublime-syntax"
+          %YAML 1.2
+          ---
+          scope: $scope
+
+          contexts:
+              main: []
+          SYNTAX
+          done
       # Run syntax test for primary package
       # after installing default and additional packages
       - name: Run Syntax Tests for Sublime Text ${{ matrix.build }}
@@ -111,7 +133,7 @@ jobs:
           package_root: ${{ env.package_name }}
           default_packages: ${{ matrix.packages }}
           default_tests: false  # default
-          additional_packages: LESS,Sass
+          additional_packages: Dummy,Less,Sass
           additional_tests: false  # default
 ```
 
