@@ -37,7 +37,7 @@ jobs:
           - build: 3210  # Latest known ST3 build with a test binary
             # packages: v3189   # Latest ST3 tag on the Packages repo
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: SublimeText/syntax-test-action@v2
         with:
           build: ${{ matrix.build }}
@@ -86,17 +86,17 @@ jobs:
       # `path` should match the package's name from packagecontrol.io
       # as this may be relevant for a package to work porperly.
       - name: Checkout ${{ env.package_name }} (primary package)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ${{ env.package_name }}
       - name: Checkout LESS (dependency)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: danro/LESS-sublime
           ref: ${{ matrix.less_ref }}
           path: LESS
       - name: Checkout Sass/Scss (dependency)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: braver/SublimeSass
           ref: ${{ matrix.sass_ref }}
