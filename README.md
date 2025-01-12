@@ -151,15 +151,15 @@ jobs:
 
 ## Inputs
 
-| Name                    | Default         | Description                                                                                |
-| :---------------------- | :-------------- | :----------------------------------------------------------------------------------------- |
-| **build**               | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
-| **default_packages**    | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
-| **default_tests**       | `false`         | Whether to keep the tests of the default packages.                                         |
-| **additional_packages** | `""`            | Comma-separated list of paths to additionally checked out packages to install (e.g.: `LESS,third-party/Sass`). Uses the folders' base names as the package names to install as. |
-| **additional_tests**    | `false`         | Whether to keep the tests of the additional packages.                                      |
-| **package_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
-| **package_name**        | Repository name | Name to install the package as.                                                            |
+| Name                     | Default         | Description                                                                                |
+| :----------------------- | :-------------- | :----------------------------------------------------------------------------------------- |
+| **build**                | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
+| **default\_packages**    | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
+| **default\_tests**       | `false`         | Whether to keep the tests of the default packages.                                         |
+| **additional\_packages** | `""`            | Comma-separated list of paths to additionally checked out packages to install (e.g.: `LESS,third-party/Sass`). Uses the folders' base names as the package names to install as. |
+| **additional\_tests**    | `false`         | Whether to keep the tests of the additional packages.                                      |
+| **package\_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
+| **package\_name**        | Repository name | Name to install the package as.                                                            |
 
 [default packages]: https://github.com/sublimehq/Packages/
 
