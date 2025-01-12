@@ -42,16 +42,6 @@ jobs:
           build: 4073
           package_root: test/no_defpkg
 
-  no_defpkg_old_runtime:
-    name: Without default packages, latest build, ubuntu-20.04
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: latest
-          package_root: test/no_defpkg
-
   third-party_stable:
     name: Third-party, latest stable
     runs-on: ubuntu-latest
@@ -83,7 +73,7 @@ jobs:
           dummy_syntaxes: text.dummy
 
   st3:
-    name: ST3 build
+    name: Without default packages, ST3
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -92,6 +82,16 @@ jobs:
           build: 3210
           default_packages: v3189
           package_root: test/st3
+
+  st3_no_defpkg_old_runtime:
+    name: Without default packages, ST3, ubuntu-20.04
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          build: 3210
+          package_root: test/no_defpkg
 
   # This is expected to error and used to test the error wrapper
   st3_error:
