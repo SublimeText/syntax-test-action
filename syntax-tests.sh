@@ -7,21 +7,39 @@ folder="$RUNNER_WORKSPACE/syntax_tests"
 packages="$folder/Data/Packages"
 mkdir -p "$folder"
 
-get_url() {
-    latest_url="https://download.sublimetext.com/latest/dev/linux/x64/syntax_tests"
-    template_3000="https://download.sublimetext.com/st3_syntax_tests_build_%s_x64.tar.bz2"
-    template_4000="https://download.sublimetext.com/st_syntax_tests_build_%s_x64.tar.bz2"
-    template_4079="https://download.sublimetext.com/st_syntax_tests_build_%s_x64.tar.xz"
+resolve_build() {
+    local stable_check_url="https://www.sublimetext.com/updates/4/stable_update_check"
+    local dev_check_url="https://www.sublimetext.com/updates/4/dev_update_check"
+    local build="$INPUT_BUILD"
 
-    case $INPUT_BUILD in
-        latest) echo "$latest_url";;
-        3*)     printf "$template_3000\n" "$INPUT_BUILD";;
-        4*)     if (( INPUT_BUILD < 4079 )); then
-                    printf "$template_4000\n" "$INPUT_BUILD";
+    if [[ $INPUT_BUILD == stable ]]; then
+        build="$(curl -s "$stable_check_url" | jq '.latest_version')"
+        echo >&2 "Latest stable build: $build"
+    elif [[ $INPUT_BUILD == latest ]]; then
+        build="$(curl -s "$dev_check_url" | jq '.latest_version')"
+        echo >&2 "Latest dev build: $build"
+    fi
+    echo "$build"
+}
+
+get_url() {
+    # Note: The syntax_tests binary for the latest build may not necessarily exist.
+    # Fetching from https://download.sublimetext.com/latest/dev/linux/x64/syntax_tests
+    # would be more reliable
+    # but makes using the same build for the default Packages tag harder.
+    local build="$1"
+    local template_3000="https://download.sublimetext.com/st3_syntax_tests_build_%s_x64.tar.bz2"
+    local template_4000="https://download.sublimetext.com/st_syntax_tests_build_%s_x64.tar.bz2"
+    local template_4079="https://download.sublimetext.com/st_syntax_tests_build_%s_x64.tar.xz"
+
+    case $build in
+        3*)     printf "$template_3000\n" "$build";;
+        4*)     if (( build < 4079 )); then
+                    printf "$template_4000\n" "$build";
                 else
-                    printf "$template_4079\n" "$INPUT_BUILD";
+                    printf "$template_4079\n" "$build";
                 fi;;
-        *)      echo >&2 "Invalid build reference: $INPUT_BUILD"; exit 100;;
+        *)      echo >&2 "Invalid build reference: $build"; exit 100;;
     esac
 }
 
@@ -39,13 +57,21 @@ fetch_binary() {
 }
 
 fetch_default_packages() {
+    local binary_build="$1"
+    local ref="$INPUT_DEFAULT_PACKAGES"
     if [[ $INPUT_DEFAULT_PACKAGES == false ]]; then
         echo '::debug::Skipping default packages'
         return
     fi
-    echo "::group::Fetching default packages (ref: $INPUT_DEFAULT_PACKAGES, tests: $INPUT_DEFAULT_TESTS)"
+    if [[ $INPUT_DEFAULT_PACKAGES == binary ]]; then
+        echo "::debug::Using tag of binary version: $binary_build"
+        # Note: Tag may not always exist yet as they seem to be created manually.
+        ref="v$binary_build"
+    fi
+
+    echo "::group::Fetching default packages (ref: $ref, tests: $INPUT_DEFAULT_TESTS)"
     pushd "$(mktemp -d)"
-    wget --content-disposition "https://github.com/sublimehq/Packages/archive/$INPUT_DEFAULT_PACKAGES.tar.gz"
+    wget --content-disposition "https://github.com/sublimehq/Packages/archive/$ref.tar.gz"
     tar xf Packages-*.tar.gz
     if [[ $INPUT_DEFAULT_TESTS != true ]]; then
         find Packages-*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
@@ -101,13 +127,14 @@ SYNTAX
     done
 }
 
-# TODO cache $folder/syntax_test based on $INPUT_BUILD != latest
-echo "::group::Fetching binary (build $INPUT_BUILD)"
-get_url | fetch_binary
+# TODO cache $folder/syntax_test if not latest or stable
+build="$(resolve_build)"
+echo "::group::Fetching binary (build $build)"
+get_url "$build" | fetch_binary
 echo '::endgroup::'
 
-# TODO cache $packages based on $INPUT_DEFAULT_PACKAGES not in (master, st3) (or resolve ref to hash)
-fetch_default_packages
+# TODO cache $packages based on $INPUT_DEFAULT_PACKAGES not in (master, st3, binary) (or resolve ref to hash)
+fetch_default_packages "$build"
 
 link_package
 
