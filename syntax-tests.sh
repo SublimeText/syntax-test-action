@@ -21,7 +21,7 @@ get_url() {
                 else
                     printf "$template_4079\n" "$INPUT_BUILD";
                 fi;;
-        *)      echo >&2 "Invalid build reference"; exit 100;;
+        *)      echo >&2 "Invalid build reference: $INPUT_BUILD"; exit 100;;
     esac
 }
 
@@ -72,7 +72,7 @@ link_additional_packages() {
     IFS=","
     for pkg in $INPUT_ADDITIONAL_PACKAGES; do
         # link additional package into testing dir's Package folder
-        echo "Linking third-party package from $pkg"
+        echo "Linking third-party package from '$pkg'"
         ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
         # drop additional syntax tests
         if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then
@@ -89,7 +89,7 @@ create_dummy_syntaxes() {
     mkdir "$packages/_Dummy"
     for scope in $INPUT_DUMMY_SYNTAXES; do
         # link additional package into testing dir's Package folder
-        echo "Creating dummy syntax for scope $scope"
+        echo "Creating dummy syntax for scope '$scope'"
         cat << SYNTAX > "$packages/_Dummy/$scope.sublime-syntax"
 %YAML 1.2
 ---
