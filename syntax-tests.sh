@@ -81,6 +81,26 @@ link_additional_packages() {
     done
 }
 
+create_dummy_syntaxes() {
+    if [[ -z $INPUT_DUMMY_SYNTAXES ]]; then
+        return
+    fi
+    IFS=","
+    mkdir "$packages/_Dummy"
+    for scope in $INPUT_DUMMY_SYNTAXES; do
+        # link additional package into testing dir's Package folder
+        echo "Creating dummy syntax for scope $scope"
+        cat << SYNTAX > "$packages/_Dummy/$scope.sublime-syntax"
+%YAML 1.2
+---
+scope: $scope
+
+contexts:
+  main: []
+SYNTAX
+    done
+}
+
 # TODO cache $folder/syntax_test based on $INPUT_BUILD != latest
 echo "::group::Fetching binary (build $INPUT_BUILD)"
 get_url | fetch_binary
@@ -92,6 +112,8 @@ fetch_default_packages
 link_package
 
 link_additional_packages
+
+create_dummy_syntaxes
 
 # TODO There seems to be some add-matcher workflow command.
 #   We could generate/adjust that to only catch files

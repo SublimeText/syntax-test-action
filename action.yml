@@ -26,6 +26,10 @@ inputs:
     description: Whether to keep the tests of the default packages
     required: false
     default: false
+  dummy_syntaxes:
+    description: Comma-separated list of base scopes to create empty syntaxes for
+    required: false
+    default: ''
   package_name:
     description: Name to install the package as
     required: false
@@ -67,5 +71,6 @@ runs:
         INPUT_BUILD: ${{ inputs.build }}
         INPUT_DEFAULT_PACKAGES: ${{ inputs.default_packages }}
         INPUT_DEFAULT_TESTS: ${{ inputs.default_tests }}
+        INPUT_DUMMY_SYNTAXES: ${{ inputs.dummy_syntaxes }}
         INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
         INPUT_PACKAGE_ROOT: ${{ inputs.package_root }}

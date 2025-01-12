@@ -1,0 +1,9 @@
+%YAML 1.2
+---
+scope: text.test
+
+contexts:
+  main:
+    - match: ''
+      embed: scope:text.dummy
+      escape: $
