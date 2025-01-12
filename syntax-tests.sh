@@ -64,9 +64,9 @@ fetch_default_packages() {
         return
     fi
     if [[ $INPUT_DEFAULT_PACKAGES == binary ]]; then
-        echo "::debug::Using tag of binary version: $binary_build"
-        # Note: Tag may not always exist yet as they seem to be created manually.
-        ref="v$binary_build"
+        tag_build="$(get_closest_tag "$binary_build")"
+        ref="v$tag_build"
+        echo "Using closest tag to binary version: $ref"
     fi
 
     echo "::group::Fetching default packages (ref: $ref, tests: $INPUT_DEFAULT_TESTS)"
@@ -84,6 +84,16 @@ fetch_default_packages() {
         -exec mv -vt "$packages/" '{}' +
     popd
     echo '::endgroup::'
+}
+
+get_closest_tag() {
+    local base="$1"
+    git ls-remote --tags https://github.com/sublimehq/Packages.git "refs/tags/v????" \
+        | cut -f2 \
+        | cut -d'v' -f2 \
+        | awk "{ if (\$1 <= $base) { print \$1 } }" \
+        | sort -r \
+        | head -n1
 }
 
 link_package() {
