@@ -34,8 +34,10 @@ jobs:
         include:
           - build: latest  # This is the default
             # packages: master  # If you depend on a default syntax definition
+          - build: stable  # Fetches the binary for the latest stable build
+            # packages: binary  # Use respective tag for the selected binary build.
           - build: 3210  # Latest known ST3 build with a test binary
-            # packages: v3189   # Latest ST3 tag on the Packages repo
+            # packages: v3189  # Latest ST3 tag on the Packages repo
     steps:
       - uses: actions/checkout@v4
       - uses: SublimeText/syntax-test-action@v2
@@ -136,8 +138,8 @@ jobs:
 
 | Name                     | Default         | Description |
 | :----------------------- | :-------------- | :---------- |
-| **build**                | `"latest"`      | ST build that should be installed as an integer. Not all builds are available. |
-| **default\_packages**    | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
+| **build**                | `"latest"`      | ST build that should be installed as an integer. `"latest"` is for the dev channel, `"stable"` for the stable channel. Not all builds are available. |
+| **default\_packages**    | `"false"`       | Install the [default packages][] and which version. Accepts any git ref, e.g. `"master"`, or `"binary"` for the tag of the respective binary. Note that the corresponding tag may not always exist. |
 | **default\_tests**       | `false`         | Whether to keep the tests of the default packages. |
 | **additional\_packages** | `""`            | Comma-separated list of paths to additionally checked out packages to install (e.g.: `LESS,third-party/Sass`). Uses the folders' base names as the package names to install as. |
 | **additional\_tests**    | `false`         | Whether to keep the tests of the additional packages. |

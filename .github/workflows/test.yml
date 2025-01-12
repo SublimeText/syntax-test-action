@@ -3,32 +3,32 @@ name: Tests
 on: [push, pull_request]
 
 jobs:
-  no_defpkg:
-    name: Without default packages
+  no_defpkg_stable:
+    name: Without default packages, latest stable
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./
         with:
-          build: 4189
+          build: stable
           package_root: test/no_defpkg
 
   # TODO indentation tests
   # TODO reference & definition tests
 
-  defpkg:
+  defpkg_stable:
     name: With default packages, latest stable
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./
         with:
-          build: 4189
-          default_packages: master
+          build: stable
+          default_packages: binary
           package_root: test/defpkg
 
   no_defpkg_old_build:
-    name: Without default packages, old build
+    name: Without default packages, build 4073
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,8 +47,8 @@ jobs:
           build: latest
           package_root: test/no_defpkg
 
-  third-party:
-    name: Third-party
+  third-party_stable:
+    name: Third-party, latest stable
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (primary package)
@@ -61,19 +61,19 @@ jobs:
           path: third-party/INI
       - uses: ./
         with:
-          build: 4189  # stable
+          build: stable
           package_root: test/third-party
           additional_packages: third-party/INI
 
-  dummy_syntax:
-    name: Dummy Syntax
+  dummy_syntax_stable:
+    name: Dummy Syntax, latest stable
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo (primary package)
         uses: actions/checkout@v4
       - uses: ./
         with:
-          build: 4189  # stable
+          build: stable
           package_root: test/dummy-syntax
           dummy_syntaxes: text.dummy
 
