@@ -159,6 +159,12 @@ jobs:
 - Added `dummy_syntaxes` input that creates empty syntax files
   to satisfy external `embed`s that would otherwise result in CI failures.
   (@FichteFoll, #13, #20)
+- Added ability to specify `stable` for the `build` input,
+  which automatically determines the latest stable build.
+  (@FichteFoll, #21, #6)
+- Added ability to specify `binary` for the `default_packages` input,
+  which automatically resolves to the closest tag on the repository.
+  (@FichteFoll, #21)
 
 ### v2.3 (2025-01-11)
 
