@@ -106,6 +106,6 @@ echo 'Running binary'
             IFS=$':' read -r path row col message <<< "$line"
             file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-            echo "::error file=$file,line=$row,col=$col::$message"
+            echo "::error file=$file,line=$row,col=$col::${message# }"
         fi
     done
