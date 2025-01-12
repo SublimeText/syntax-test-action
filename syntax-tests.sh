@@ -39,6 +39,11 @@ fetch_binary() {
 }
 
 fetch_default_packages() {
+    if [[ $INPUT_DEFAULT_PACKAGES == false ]]; then
+        echo '::debug::Skipping default packages'
+        return
+    fi
+    echo "::group::Fetching default packages (ref: $INPUT_DEFAULT_PACKAGES, tests: $INPUT_DEFAULT_TESTS)"
     pushd "$(mktemp -d)"
     wget --content-disposition "https://github.com/sublimehq/Packages/archive/$INPUT_DEFAULT_PACKAGES.tar.gz"
     tar xf Packages-*.tar.gz
@@ -52,9 +57,11 @@ fetch_default_packages() {
         -not -name '.github' \
         -exec mv -vt "$packages/" '{}' +
     popd
+    echo '::endgroup::'
 }
 
 link_package() {
+    echo 'Linking package'
     ln -vs "$(realpath "$INPUT_PACKAGE_ROOT")" "$packages/$INPUT_PACKAGE_NAME"
 }
 
@@ -79,17 +86,10 @@ get_url | fetch_binary
 echo '::endgroup::'
 
 # TODO cache $packages based on $INPUT_DEFAULT_PACKAGES not in (master, st3) (or resolve ref to hash)
-if [[ $INPUT_DEFAULT_PACKAGES != false ]]; then
-    echo "::group::Fetching default packages (ref: $INPUT_DEFAULT_PACKAGES, tests: $INPUT_DEFAULT_TESTS)"
-    fetch_default_packages
-    echo '::endgroup::'
-else
-    echo '::debug::Skipping default packages'
-fi
+fetch_default_packages
 
-
-echo 'Linking package'
 link_package
+
 link_additional_packages
 
 # TODO There seems to be some add-matcher workflow command.
