@@ -101,28 +101,6 @@ jobs:
           repository: SublimeText/Sass
           ref: ${{ matrix.sass_ref }}
           path: Sass
-      # External syntax definitions, which are embedded without being tested
-      # in detail, can be provided as empty dummies to just ensure their main
-      # scope is available.
-      - name: Create Dummy package (dependency)
-        run: |
-          scopes=(
-              source.livescript
-              source.postcss
-              source.sss
-              source.stylus
-          )
-          mkdir -vp "Dummy"
-          for scope in ${scopes[@]}; do
-          cat << SYNTAX > "Dummy/$scope.sublime-syntax"
-          %YAML 1.2
-          ---
-          scope: $scope
-
-          contexts:
-              main: []
-          SYNTAX
-          done
       # Run syntax test for primary package
       # after installing default and additional packages
       - name: Run Syntax Tests for Sublime Text ${{ matrix.build }}
@@ -135,6 +113,11 @@ jobs:
           default_tests: false  # default
           additional_packages: Dummy,Less,Sass
           additional_tests: false  # default
+          # External syntax definitions,
+          # which are embedded without being tested in detail,
+          # can be created as empty dummies
+          # to just ensure their main scope is available.
+          dummy_syntaxes: source.livescript,source.postcss,source.sss,source.stylus
 ```
 
 > **Note**
@@ -160,6 +143,7 @@ jobs:
 | **additional\_tests**    | `false`         | Whether to keep the tests of the additional packages.                                      |
 | **package\_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
 | **package\_name**        | Repository name | Name to install the package as.                                                            |
+| **dummy\_syntaxes**      | `""`            | Comma-separated list of base scopes to create empty syntaxes for, e.g. `source.postcss,source.stylus`. |
 
 [default packages]: https://github.com/sublimehq/Packages/
 

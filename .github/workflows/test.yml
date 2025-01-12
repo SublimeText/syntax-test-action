@@ -65,6 +65,18 @@ jobs:
           package_root: test/third-party
           additional_packages: third-party/INI
 
+  dummy_syntax:
+    name: Dummy Syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo (primary package)
+        uses: actions/checkout@v4
+      - uses: ./
+        with:
+          build: 4189  # stable
+          package_root: test/dummy-syntax
+          dummy_syntaxes: text.dummy
+
   st3:
     name: ST3 build
     runs-on: ubuntu-latest
