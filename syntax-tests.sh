@@ -66,18 +66,19 @@ link_package() {
 }
 
 link_additional_packages() {
-    if [[ -n $INPUT_ADDITIONAL_PACKAGES ]]; then
-        IFS=","
-        for pkg in $INPUT_ADDITIONAL_PACKAGES; do
-            # link additional package into testing dir's Package folder
-            echo "Linking third-party package from $pkg"
-            ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
-            # drop additional syntax tests
-            if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then
-                find "$(realpath "$pkg")" -type f -name 'syntax_test*' -exec rm -v '{}' \;
-            fi
-        done
+    if [[ -z $INPUT_ADDITIONAL_PACKAGES ]]; then
+        return
     fi
+    IFS=","
+    for pkg in $INPUT_ADDITIONAL_PACKAGES; do
+        # link additional package into testing dir's Package folder
+        echo "Linking third-party package from $pkg"
+        ln -vs "$(realpath "$pkg")" "$packages/$(basename "$pkg")"
+        # drop additional syntax tests
+        if [[ $INPUT_ADDITIONAL_TESTS != true ]]; then
+            find "$(realpath "$pkg")" -type f -name 'syntax_test*' -exec rm -v '{}' \;
+        fi
+    done
 }
 
 # TODO cache $folder/syntax_test based on $INPUT_BUILD != latest
