@@ -134,15 +134,15 @@ jobs:
 
 ## Inputs
 
-| Name                     | Default         | Description                                                                                |
-| :----------------------- | :-------------- | :----------------------------------------------------------------------------------------- |
-| **build**                | `"latest"`      | ST build that should be installed as an integer. Not all builds are available.             |
+| Name                     | Default         | Description |
+| :----------------------- | :-------------- | :---------- |
+| **build**                | `"latest"`      | ST build that should be installed as an integer. Not all builds are available. |
 | **default\_packages**    | `false`         | Install the [default packages][] and which version (accepts any git ref, e.g. `"master"`). |
-| **default\_tests**       | `false`         | Whether to keep the tests of the default packages.                                         |
+| **default\_tests**       | `false`         | Whether to keep the tests of the default packages. |
 | **additional\_packages** | `""`            | Comma-separated list of paths to additionally checked out packages to install (e.g.: `LESS,third-party/Sass`). Uses the folders' base names as the package names to install as. |
-| **additional\_tests**    | `false`         | Whether to keep the tests of the additional packages.                                      |
-| **package\_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder.                    |
-| **package\_name**        | Repository name | Name to install the package as.                                                            |
+| **additional\_tests**    | `false`         | Whether to keep the tests of the additional packages. |
+| **package\_root**        | `"."`           | Path to the package root that is linked to the testing Packages folder. |
+| **package\_name**        | Repository name | Name to install the package as. |
 | **dummy\_syntaxes**      | `""`            | Comma-separated list of base scopes to create empty syntaxes for, e.g. `source.postcss,source.stylus`. |
 
 [default packages]: https://github.com/sublimehq/Packages/
@@ -152,9 +152,16 @@ jobs:
 
 ### v2
 
+### v2.4 (2025-01-12)
+
+- Added `dummy_syntaxes` input that creates empty syntax files
+  to satisfy external `embed`s that would otherwise result in CI failures.
+  (@FichteFoll, #13, #20)
+
 ### v2.3 (2025-01-11)
 
-- Fix dependencies for `ubuntu-24.04` runner. (@deathaxe, #17, #18)
+- Fix dependencies for `ubuntu-24.04` runner.
+  (@deathaxe, #17, #18)
 
 ### v2.2 (2023-01-08)
 
@@ -165,16 +172,19 @@ jobs:
 ### v2.1 (2021-06-07)
 
 - Treat `'latest'` as an ST4 build now that the upstream URL has been updated.
+  (@FichteFoll)
 - Group dependency installation, if necessary.
+  (@FichteFoll)
 
 ### v2.0 (2020-08-28)
 
-- Updated to new upstream download paths.
-- Does not fetch dependencies anymore for 4077+.
-- Changed from docker to composite action.
+- Updated to new upstream download paths. (@FichteFoll)
+- Does not fetch dependencies anymore for 4077+. (@FichteFoll, #2)
+- Changed from docker to composite action. (@FichteFoll)
 
 ### v1 (2020-06-07)
 
 Initial working version
 supporting ST3 and ST4 builds
 as well as fetching the default packages.
+(@FichteFoll)
