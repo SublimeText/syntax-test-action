@@ -159,7 +159,7 @@ create_dummy_syntaxes
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
 
-if [[ $build < 4081 ]]; then
+if [[ $build < 1000 ]]; then
     "$folder/syntax_tests" \
         | while read -r line; do
             echo "$line"
