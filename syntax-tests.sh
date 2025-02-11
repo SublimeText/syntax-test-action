@@ -158,14 +158,36 @@ create_dummy_syntaxes
 #   but we may not be able to rewrite the original root path.
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
-"$folder/syntax_tests" \
-    | while read -r line; do
-        echo "$line"
-        # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
-        if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
-            IFS=$':' read -r path row col message <<< "$line"
-            file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-            # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-            echo "::error file=$file,line=$row,col=$col::${message# }"
-        fi
-    done
+
+if [[ $build < 4081 ]]; then
+    "$folder/syntax_tests" \
+        | while read -r line; do
+            echo "$line"
+            # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
+            if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
+                IFS=$':' read -r path row col message <<< "$line"
+                file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+                # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+                echo "::error file=$file,line=$row,col=$col::${message# }"
+            fi
+        done
+else
+    "$folder/syntax_tests" \
+        | while read -r line; do
+            echo "${line/^ /.}"  # Replace first char so it doesn't get 
+            # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
+            # error: scope does not match
+            # 8 |        param
+            # 9 | //     ^^^^^ - variable.parameter.function.js
+            #   |        ^^^^^ these locations did not match
+            # actual:
+            #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
+            if [[ "$line" == "$folder/$packages/$INPUT_PACKAGE_NAME/"* ]]; then
+                IFS=$':' read -r path row col <<< "$line"
+                file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+                read -r message
+                # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+                echo "::error file=$file,line=$row,col=$col::${message# }"
+            fi
+        done
+fi
