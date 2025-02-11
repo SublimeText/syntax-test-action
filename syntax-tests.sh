@@ -177,7 +177,7 @@ IFS=''
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col message <<< "$line"
             file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-            if [[ $build >= 4081 ]]; then
+            if (( $build >= 4081 )); then
                 IFS=$':' read -r logtype message
             fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
