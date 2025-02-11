@@ -185,6 +185,7 @@ else
             # actual:
             #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
             echo "$line" | sed 's/^ /./'  # Replace first char so it doesn't get elided
+            echo "It's a line"
             if [[ "$line" == "$folder/$packages/$INPUT_PACKAGE_NAME/"* ]]; then
                 IFS=$':' read -r path row col <<< "$line"
                 file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
