@@ -158,12 +158,15 @@ create_dummy_syntaxes
 #   but we may not be able to rewrite the original root path.
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
-echo "Runner version $build"
 
 IFS=''
-echo "Running new"
 "$folder/syntax_tests" \
     | while read -r line; do
+        echo "$line"
+        ### Before 4081
+        # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
+
+        ### Since 4081
         # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
         # error: scope does not match
         # 8 |        param
@@ -171,13 +174,12 @@ echo "Running new"
         #   |        ^^^^^ these locations did not match
         # actual:
         #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
-        echo "$line"
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col <<< "$line"
             file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-            read -r message
+            read -r logtype message
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-            echo "::error file=$file,line=$row,col=$col::${message#error: }"
+            echo "::${logtype:-error} file=$file,line=$row,col=$col::${message#error: }"
         fi
         IFS=''
     done
