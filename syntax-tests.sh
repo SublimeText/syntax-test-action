@@ -177,7 +177,7 @@ IFS=''
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col <<< "$line"
             file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-            read -r logtype message
+            IFS=$':' read -r logtype message
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
             echo "::${logtype:-error} file=$file,line=$row,col=$col::${message#error: }"
         fi
