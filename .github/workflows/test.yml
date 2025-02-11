@@ -4,8 +4,8 @@ on:
   push:
     paths: '*'
   pull_request:
-  # schedule:
-  #   - cron: "* 0 * * SAT"
+  schedule:
+    - cron: "* 0 * * SAT"
   workflow_dispatch:
 
 jobs:
