@@ -175,6 +175,7 @@ if [[ $build < 1000 ]]; then
         done
 else
     echo "Running new"
+    IFS=''
     "$folder/syntax_tests" \
         | while read -r line; do
             # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
@@ -186,7 +187,8 @@ else
             #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
             # echo "$line" | sed 's/^ /./'  # Replace first char so it doesn't get elided
             # echo "It's a line"
-            echo "$REPLY"
+            # echo "$REPLY"
+            echo "$line"
             if [[ "$line" == "$folder/$packages/$INPUT_PACKAGE_NAME/"* ]]; then
                 IFS=$':' read -r path row col <<< "$line"
                 file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
@@ -194,5 +196,6 @@ else
                 # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
                 echo "::error file=$file,line=$row,col=$col::${message# }"
             fi
+            IFS=''
         done
 fi
