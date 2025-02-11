@@ -177,24 +177,11 @@ IFS=''
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col message <<< "$line"
             file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-            IFS=$':' read -r logtype message
+            if [[ $build >= 4081 ]]; then
+                IFS=$':' read -r logtype message
+            fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
             echo "::${logtype:-error} file=$file,line=$row,col=$col::${message# }"
         fi
         IFS=''
     done
-
-if [[ $build < 4081 ]]; then
-    echo "Running old"
-    "$folder/syntax_tests" \
-        | while read -r line; do
-            echo "$line"
-            # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
-            if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
-                IFS=$':' read -r path row col message <<< "$line"
-                file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-                # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-                echo "::error file=$file,line=$row,col=$col::${message# }"
-            fi
-        done
-fi
