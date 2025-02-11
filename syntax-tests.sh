@@ -186,13 +186,12 @@ else
             # actual:
             #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
             echo "$line"
-            echo "$folder/$packages/$INPUT_PACKAGE_NAME"
             if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
                 IFS=$':' read -r path row col <<< "$line"
                 file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
                 read -r message
                 # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-                echo "::error file=$file,line=$row,col=$col::${message# }"
+                echo "::error file=$file,line=$row,col=$col::${message#error: }"
             fi
             IFS=''
         done
