@@ -158,8 +158,10 @@ create_dummy_syntaxes
 #   but we may not be able to rewrite the original root path.
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
+echo "Runner version $build"
 
 if [[ $build < 1000 ]]; then
+    echo "Running old"
     "$folder/syntax_tests" \
         | while read -r line; do
             echo "$line"
@@ -172,9 +174,10 @@ if [[ $build < 1000 ]]; then
             fi
         done
 else
+    echo "Running new"
     "$folder/syntax_tests" \
         | while read -r line; do
-            echo "${line/^ /.}"  # Replace first char so it doesn't get 
+            echo "${line/^ /.}"  # Replace first char so it doesn't get elided
             # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
             # error: scope does not match
             # 8 |        param
