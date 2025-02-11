@@ -176,6 +176,11 @@ IFS=''
         #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col message <<< "$line"
+            echo "path: $path"
+            echo "folder: $folder"
+            echo "packages: $packages"
+            echo "input name: $INPUT_PACKAGE_NAME"
+            echo "input root: $INPUT_PACKAGE_ROOT"
             file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
             if (( $build >= 4081 )); then
                 IFS=$':' read -r logtype message
