@@ -177,7 +177,6 @@ else
     echo "Running new"
     "$folder/syntax_tests" \
         | while read -r line; do
-            echo "${line/^ /.}"  # Replace first char so it doesn't get elided
             # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
             # error: scope does not match
             # 8 |        param
@@ -185,6 +184,7 @@ else
             #   |        ^^^^^ these locations did not match
             # actual:
             #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
+            echo "$line" | sed 's/^ /./'  # Replace first char so it doesn't get elided
             if [[ "$line" == "$folder/$packages/$INPUT_PACKAGE_NAME/"* ]]; then
                 IFS=$':' read -r path row col <<< "$line"
                 file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
