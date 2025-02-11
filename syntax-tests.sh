@@ -160,6 +160,7 @@ create_dummy_syntaxes
 echo 'Running binary'
 echo "Runner version $build"
 
+IFS=''
 if [[ $build < 4081 ]]; then
     echo "Running old"
     "$folder/syntax_tests" \
@@ -175,7 +176,6 @@ if [[ $build < 4081 ]]; then
         done
 else
     echo "Running new"
-    IFS=''
     "$folder/syntax_tests" \
         | while read -r line; do
             # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
