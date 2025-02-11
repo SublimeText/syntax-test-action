@@ -158,41 +158,34 @@ create_dummy_syntaxes
 #   but we may not be able to rewrite the original root path.
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
-echo "Runner version $build"
 
-if [[ $build < 4081 ]]; then
-    echo "Running old"
-    "$folder/syntax_tests" \
-        | while read -r line; do
-            echo "$line"
+IFS=''
+"$folder/syntax_tests" \
+    | while read -r line; do
+        echo "$line"
+
+        if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
+
+            ### Before 4081
             # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
-            if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
-                IFS=$':' read -r path row col message <<< "$line"
-                file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-                # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-                echo "::error file=$file,line=$row,col=$col::${message# }"
+            IFS=$':' read -r path row col message <<< "$line"
+
+            if [[ $build >= 4081 ]]; then
+
+                ### Since 4081
+                # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
+                # error: scope does not match
+                # 8 |        param
+                # 9 | //     ^^^^^ - variable.parameter.function.js
+                #   |        ^^^^^ these locations did not match
+                # actual:
+                #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
+                read -r _ message
             fi
-        done
-else
-    echo "Running new"
-    IFS=''
-    "$folder/syntax_tests" \
-        | while read -r line; do
-            # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
-            # error: scope does not match
-            # 8 |        param
-            # 9 | //     ^^^^^ - variable.parameter.function.js
-            #   |        ^^^^^ these locations did not match
-            # actual:
-            #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
-            echo "$line"
-            if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
-                IFS=$':' read -r path row col <<< "$line"
-                file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-                read -r message
-                # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-                echo "::error file=$file,line=$row,col=$col::${message#error: }"
-            fi
+            file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+            # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+            echo "::error file=$file,line=$row,col=$col::${message# }"
             IFS=''
-        done
-fi
+        fi
+    done
+IFS=' \t\n'
