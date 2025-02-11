@@ -181,7 +181,7 @@ IFS=''
             echo "packages: $packages"
             echo "input name: $INPUT_PACKAGE_NAME"
             echo "input root: $INPUT_PACKAGE_ROOT"
-            file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+            file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
             echo "file: $file"
             if (( $build >= 4081 )); then
                 IFS=$':' read -r logtype message
