@@ -175,7 +175,7 @@ IFS=''
         # actual:
         #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
-            IFS=$':' read -r path row col <<< "$line"
+            IFS=$':' read -r path row col message <<< "$line"
             file="${path/$folder\/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
             IFS=$':' read -r logtype message
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
