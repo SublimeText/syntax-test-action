@@ -182,6 +182,6 @@ IFS=''
             fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
             echo "::${logtype:-error} file=$file,line=$row,col=$col::${message# }"
+            IFS=''
         fi
-        IFS=''
     done
