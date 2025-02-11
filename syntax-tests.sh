@@ -160,7 +160,7 @@ create_dummy_syntaxes
 echo 'Running binary'
 echo "Runner version $build"
 
-if [[ $build < 1000 ]]; then
+if [[ $build < 4081 ]]; then
     echo "Running old"
     "$folder/syntax_tests" \
         | while read -r line; do
