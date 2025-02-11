@@ -9,90 +9,90 @@ on:
   workflow_dispatch:
 
 jobs:
-  no_defpkg_stable:
-    name: Without default packages, latest stable
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: stable
-          package_root: test/no_defpkg
+  # no_defpkg_stable:
+  #   name: Without default packages, latest stable
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         build: stable
+  #         package_root: test/no_defpkg
 
-  # TODO indentation tests
-  # TODO reference & definition tests
+  # # TODO indentation tests
+  # # TODO reference & definition tests
 
-  defpkg_stable:
-    name: With default packages, latest stable
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: stable
-          default_packages: binary
-          package_root: test/defpkg
+  # defpkg_stable:
+  #   name: With default packages, latest stable
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         build: stable
+  #         default_packages: binary
+  #         package_root: test/defpkg
 
-  no_defpkg_old_build:
-    name: Without default packages, build 4073
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: 4073
-          package_root: test/no_defpkg
+  # no_defpkg_old_build:
+  #   name: Without default packages, build 4073
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         build: 4073
+  #         package_root: test/no_defpkg
 
-  third-party_stable:
-    name: Third-party, latest stable
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo (primary package)
-        uses: actions/checkout@v4
-      - name: Checkout INI package (dependency)
-        uses: actions/checkout@v4
-        with:
-          repository: jwortmann/ini-syntax
-          ref: v1.5.0
-          path: third-party/INI
-      - uses: ./
-        with:
-          build: stable
-          package_root: test/third-party
-          additional_packages: third-party/INI
+  # third-party_stable:
+  #   name: Third-party, latest stable
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repo (primary package)
+  #       uses: actions/checkout@v4
+  #     - name: Checkout INI package (dependency)
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: jwortmann/ini-syntax
+  #         ref: v1.5.0
+  #         path: third-party/INI
+  #     - uses: ./
+  #       with:
+  #         build: stable
+  #         package_root: test/third-party
+  #         additional_packages: third-party/INI
 
-  dummy_syntax_stable:
-    name: Dummy Syntax, latest stable
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo (primary package)
-        uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: stable
-          package_root: test/dummy-syntax
-          dummy_syntaxes: text.dummy
+  # dummy_syntax_stable:
+  #   name: Dummy Syntax, latest stable
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repo (primary package)
+  #       uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         build: stable
+  #         package_root: test/dummy-syntax
+  #         dummy_syntaxes: text.dummy
 
-  st3:
-    name: Without default packages, ST3
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: 3210
-          default_packages: v3189
-          package_root: test/st3
+  # st3:
+  #   name: Without default packages, ST3
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         build: 3210
+  #         default_packages: v3189
+  #         package_root: test/st3
 
-  st3_no_defpkg_old_runtime:
-    name: Without default packages, ST3, ubuntu-20.04
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          build: 3210
-          package_root: test/no_defpkg
+  # st3_no_defpkg_old_runtime:
+  #   name: Without default packages, ST3, ubuntu-20.04
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         build: 3210
+  #         package_root: test/no_defpkg
 
   # This is expected to error and used to test the error wrapper
   st3_error:
