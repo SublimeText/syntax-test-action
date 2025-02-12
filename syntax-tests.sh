@@ -153,7 +153,7 @@ link_additional_packages
 create_dummy_syntaxes
 
 echo "::group::Checking syntax test filenames"
-for path in $(find . -iname syntax_test* | grep -v '/syntax_test_X'); do
+for path in $(find . -iname syntax_test* | grep -v '/syntax_test_'); do
     file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
     echo "::warning file=$file::Syntax test files must begin with 'syntax_test_'"
 done
