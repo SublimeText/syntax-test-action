@@ -185,3 +185,4 @@ IFS=''
             IFS=''
         fi
     done
+IFS=' \t\n'
