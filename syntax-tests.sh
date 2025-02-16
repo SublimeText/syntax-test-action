@@ -159,9 +159,8 @@ create_dummy_syntaxes
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
 
-IFS=''
 "$folder/syntax_tests" \
-    | while read -r line; do
+    | while IFS='' read -r line; do
         echo "$line"
         ### Before 4081
         # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
@@ -182,7 +181,5 @@ IFS=''
             fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
             echo "::${logtype:-error} file=$file,line=$row,col=$col::${message# }"
-            IFS=''
         fi
     done
-IFS=' \t\n'
