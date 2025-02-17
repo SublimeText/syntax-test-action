@@ -162,10 +162,10 @@ echo 'Running binary'
 "$folder/syntax_tests" \
     | while IFS='' read -r line; do
         echo "$line"
-        ### Before 4081
-        # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
+        ### Before 4181
+        # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
 
-        ### Since 4081
+        ### Since 4181
         # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
         # error: scope does not match
         # 8 |        param
@@ -176,7 +176,7 @@ echo 'Running binary'
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col message <<< "$line"
             file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-            if (( $build >= 4081 )); then
+            if (( $build >= 4181 )); then
                 IFS=$':' read -r logtype message
             fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
