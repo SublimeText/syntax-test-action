@@ -16,12 +16,12 @@ on:
   push:
     paths:
       - '**.sublime-syntax'
-      - '**/syntax_test*'
+      - '**/syntax_test_*'
       - '**.tmPreferences'
   pull_request:
     paths:
       - '**.sublime-syntax'
-      - '**/syntax_test*'
+      - '**/syntax_test_*'
       - '**.tmPreferences'
 
 jobs:
@@ -55,12 +55,12 @@ on:
   push:
     paths:
       - '**.sublime-syntax'
-      - '**/syntax_test*'
+      - '**/syntax_test_*'
       - '**.tmPreferences'
   pull_request:
     paths:
       - '**.sublime-syntax'
-      - '**/syntax_test*'
+      - '**/syntax_test_*'
       - '**.tmPreferences'
 
 jobs:

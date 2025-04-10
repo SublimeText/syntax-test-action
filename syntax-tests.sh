@@ -152,6 +152,18 @@ link_additional_packages
 
 create_dummy_syntaxes
 
+echo "::group::Checking syntax test filenames"
+for path in $(find . -iname syntax_test*); do
+    file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+    if echo "$file" | grep -v '/syntax_test_'; then
+        echo "::warning file=$file::Syntax test filenames must begin with 'syntax_test_'"
+    fi
+    if head -n 1 "$path" | grep -vEq '.+\bSYNTAX TEST\b.+".+\.(sublime-syntax|tmLanguage)"'; then
+        echo "::warning file=$file::Syntax test file format at https://www.sublimetext.com/docs/syntax.html#testing"
+    fi
+done
+echo '::endgroup::'
+
 # TODO There seems to be some add-matcher workflow command.
 #   We could generate/adjust that to only catch files
 #   in the installed package,
