@@ -137,42 +137,22 @@ SYNTAX
     done
 }
 
-# TODO cache $folder/syntax_test if not latest or stable
-build="$(resolve_build)"
-echo "::group::Fetching binary (build $build)"
-get_url "$build" | fetch_binary
-echo '::endgroup::'
+check_syntax_test_filenames() {
+    echo "::group::Checking syntax test filenames"
+    for path in $(find . -iname syntax_test*); do
+        file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+        if echo "$file" | grep -v '/syntax_test_'; then
+            echo "::warning file=$file::Syntax test filenames must begin with 'syntax_test_'"
+        fi
+        if head -n 1 "$path" | grep -vEq '.+\bSYNTAX TEST\b.+".+\.(sublime-syntax|tmLanguage)"'; then
+            echo "::warning file=$file::Syntax test file format at https://www.sublimetext.com/docs/syntax.html#testing"
+        fi
+    done
+    echo '::endgroup::'
+}
 
-# TODO cache $packages based on $INPUT_DEFAULT_PACKAGES not in (master, st3, binary) (or resolve ref to hash)
-fetch_default_packages "$build"
-
-link_package
-
-link_additional_packages
-
-create_dummy_syntaxes
-
-echo "::group::Checking syntax test filenames"
-for path in $(find . -iname syntax_test*); do
-    file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
-    if echo "$file" | grep -v '/syntax_test_'; then
-        echo "::warning file=$file::Syntax test filenames must begin with 'syntax_test_'"
-    fi
-    if head -n 1 "$path" | grep -vEq '.+\bSYNTAX TEST\b.+".+\.(sublime-syntax|tmLanguage)"'; then
-        echo "::warning file=$file::Syntax test file format at https://www.sublimetext.com/docs/syntax.html#testing"
-    fi
-done
-echo '::endgroup::'
-
-# TODO There seems to be some add-matcher workflow command.
-#   We could generate/adjust that to only catch files
-#   in the installed package,
-#   but we may not be able to rewrite the original root path.
-#   https://github.com/rbialon/flake8-annotations/blob/master/index.js
-echo 'Running binary'
-
-"$folder/syntax_tests" \
-    | while IFS='' read -r line; do
+parse_test_results() {
+    while IFS='' read -r line; do
         echo "$line"
         ### Before 4181
         # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
@@ -195,3 +175,33 @@ echo 'Running binary'
             echo "::${logtype:-error} file=$file,line=$row,col=$col::${message# }"
         fi
     done
+}
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+# TODO cache $folder/syntax_test if not latest or stable
+build="$(resolve_build)"
+echo "::group::Fetching binary (build $build)"
+get_url "$build" | fetch_binary
+echo '::endgroup::'
+
+# TODO cache $packages based on $INPUT_DEFAULT_PACKAGES not in (master, st3, binary) (or resolve ref to hash)
+fetch_default_packages "$build"
+
+link_package
+
+link_additional_packages
+
+create_dummy_syntaxes
+
+check_syntax_test_filenames
+
+# TODO There seems to be some add-matcher workflow command.
+#   We could generate/adjust that to only catch files
+#   in the installed package,
+#   but we may not be able to rewrite the original root path.
+#   https://github.com/rbialon/flake8-annotations/blob/master/index.js
+echo 'Running binary'
+"$folder/syntax_tests" | parse_test_results
