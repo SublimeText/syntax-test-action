@@ -93,8 +93,8 @@ jobs:
           build: 3210
           package_root: test/no_defpkg
 
-  # This is expected to error and used to test the error wrapper
-  st3_error:
+  # The following jobs are expected to error and used to test the error wrapper
+  error:
     name: Error on purpose
     runs-on: ubuntu-latest
     steps:
@@ -102,6 +102,19 @@ jobs:
       - uses: ./
         continue-on-error: true
         with:
+          # The format was changed in build 4181
           build: 4189
+          default_packages: master
+          package_root: test/st3
+
+  error_old_format:
+    name: Error on purpose (old format)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        continue-on-error: true
+        with:
+          build: 4180
           default_packages: master
           package_root: test/st3
