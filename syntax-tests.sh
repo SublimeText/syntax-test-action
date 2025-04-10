@@ -153,7 +153,10 @@ check_syntax_test_filenames() {
 
 parse_test_results() {
     while IFS='' read -r line; do
+        # Reprint this line to make it visible in the logs.
+        # Not necessary for the lines we include in the message segment below.
         echo "$line"
+
         ### Before 4181
         # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
 
@@ -165,11 +168,25 @@ parse_test_results() {
         #   |        ^^^^^ these locations did not match
         # actual:
         #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
+        #
+        # (error blocks are then terminated by a blank line)
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col message <<< "$line"
             file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+
             if (( $build >= 4181 )); then
-                IFS=$':' read -r logtype message
+                IFS='' read -r msg_line
+                IFS=$':' read -r logtype message <<< "$msg_line"
+
+                # Collect lines with more details until the next blank line
+                while IFS='' read -r detail_line; do
+                    if [ -z "$detail_line" ]; then
+                        break
+                    fi
+                    # Using a percent-encoded newline ('%0A') works as a line break
+                    # via https://github.com/actions/toolkit/issues/193
+                    message="$message%0A$detail_line"
+                done
             fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
             echo "::${logtype:-error} file=$file,line=$row,col=$col::${message# }"
