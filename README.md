@@ -154,6 +154,16 @@ jobs:
 
 ### v2
 
+### v2.5 (2025-04-10)
+
+- Added support for the new syntax test output format of build 4181.
+  (@michaelblyons, #24, #25)
+- Added support for multi-line error messages with the new format.
+  (@FichteFoll, #29)
+- Added warnings for incorrectly named syntax test files
+  that the syntax test binary will ignore.
+  (@michaelblyons, #26, #27)
+
 ### v2.4 (2025-01-12)
 
 - Added `dummy_syntaxes` input that creates empty syntax files
