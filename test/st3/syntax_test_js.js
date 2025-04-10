@@ -8,3 +8,8 @@ abc = (
        param
 //     ^^^^^ - variable.parameter.function.js
     ) => 1 + 2
+
+xyz = (
+       param
+//     ^^^^^ - variable.parameter.function.js
+    ) => 8 + 9
