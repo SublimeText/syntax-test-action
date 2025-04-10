@@ -170,14 +170,28 @@ echo '::endgroup::'
 #   but we may not be able to rewrite the original root path.
 #   https://github.com/rbialon/flake8-annotations/blob/master/index.js
 echo 'Running binary'
+
 "$folder/syntax_tests" \
-    | while read -r line; do
+    | while IFS='' read -r line; do
         echo "$line"
-        # /syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
+        ### Before 4181
+        # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/test/defpkg/syntax_test_test:7:1: [source.python constant.language] does not match scope [text.test]
+
+        ### Since 4181
+        # /home/runner/work/syntax-test-action/syntax_tests/Data/Packages/syntax-test-action/syntax_test_js.js:8:8
+        # error: scope does not match
+        # 8 |        param
+        # 9 | //     ^^^^^ - variable.parameter.function.js
+        #   |        ^^^^^ these locations did not match
+        # actual:
+        #   |        ^^^^^ source.js meta.function.parameters.js meta.binding.name.js variable.parameter.function.js
         if [[ "$line" == "$packages/$INPUT_PACKAGE_NAME/"* ]]; then
             IFS=$':' read -r path row col message <<< "$line"
             file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
+            if (( $build >= 4181 )); then
+                IFS=$':' read -r logtype message
+            fi
             # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-            echo "::error file=$file,line=$row,col=$col::${message# }"
+            echo "::${logtype:-error} file=$file,line=$row,col=$col::${message# }"
         fi
     done
