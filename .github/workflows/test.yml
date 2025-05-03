@@ -84,8 +84,8 @@ jobs:
           package_root: test/st3
 
   st3_no_defpkg_old_runtime:
-    name: Without default packages, ST3, ubuntu-20.04
-    runs-on: ubuntu-20.04
+    name: Without default packages, ST3, ubuntu-22.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: ./
