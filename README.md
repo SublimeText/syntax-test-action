@@ -154,6 +154,11 @@ jobs:
 
 ### v2
 
+### v2.5.1 (2026-04-08)
+
+- Fix erroneous syntax file name warnings for file paths with spaces.
+  (@michaelblyons, #30, #31)
+
 ### v2.5 (2025-04-10)
 
 - Added support for the new syntax test output format of build 4181.
