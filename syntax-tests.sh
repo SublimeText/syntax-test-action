@@ -139,7 +139,7 @@ SYNTAX
 
 check_syntax_test_filenames() {
     echo "::group::Checking syntax test filenames"
-    for path in $(find . -iname syntax_test*); do
+    for path in "$(find . -iname 'syntax_test*')"; do
         file="${path/$packages\/$INPUT_PACKAGE_NAME/$INPUT_PACKAGE_ROOT}"
         if echo "$file" | grep -v '/syntax_test_'; then
             echo "::warning file=$file::Syntax test filenames must begin with 'syntax_test_'"
